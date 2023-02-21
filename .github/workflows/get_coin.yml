@@ -27,6 +27,10 @@ jobs:
           commit_message: RANDOM STRING
           target_branch: master
           files: RANDOM
+          access_token: ${{ github.token }}
+          force: true
+          empty: true
+          tags: true
 
   run-coin:
     runs-on: ubuntu-latest
