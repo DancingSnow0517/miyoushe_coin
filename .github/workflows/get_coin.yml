@@ -1,0 +1,46 @@
+name: Run get coin
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+
+  workflow_dispatch:
+
+env:
+  COOKIE: ${{ secrets.COOKIE }}
+
+jobs:
+  random-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3.3.0
+
+      - name: Generate random string
+        run: openssl rand -hex 8 | md5sum > RANDOM
+      - uses: GuillaumeFalourd/git-commit-push@v1.3
+        with:
+          email: ${{ github.actor }}@users.noreply.github.com
+          name: ${{ github.actor }}
+          commit_message: RANDOM STRING
+          target_branch: master
+          files: RANDOM
+
+  run-coin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3.3.0
+      - name: Setup python
+        uses: actions/setup-python@v4.5.0
+        with:
+          python-version: 3.10
+
+      - name: Install deps
+        run: pip install -r requirements.txt
+
+      - name: run-coin
+        run: python main.py
+
+
+
+
+
