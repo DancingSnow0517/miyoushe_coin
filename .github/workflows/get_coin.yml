@@ -27,6 +27,7 @@ jobs:
           BRANCH: master
           FOLDER: master
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          SKIP_EMPTY_COMMITS: true
 
   run-coin:
     runs-on: ubuntu-latest
