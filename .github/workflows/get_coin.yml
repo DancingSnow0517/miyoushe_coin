@@ -20,17 +20,13 @@ jobs:
 
       - name: Generate random string
         run: openssl rand -hex 8 | md5sum > RANDOM
-      - uses: GuillaumeFalourd/git-commit-push@v1.3
+      - uses: s0/git-publish-subdir-action@develop
+        name: Commit RANDOM
         with:
-          email: ${{ github.actor }}@users.noreply.github.com
-          name: ${{ github.actor }}
-          commit_message: RANDOM STRING
-          target_branch: master
-          files: RANDOM
-          access_token: ${{ github.token }}
-          force: true
-          empty: true
-          tags: true
+          REPO: self
+          BRANCH: master
+          FOLDER: master
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
   run-coin:
     runs-on: ubuntu-latest
