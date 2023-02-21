@@ -10,25 +10,6 @@ env:
   COOKIE: ${{ secrets.COOKIE }}
 
 jobs:
-  random-commit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3.3.0
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-
-      - name: Generate random string
-        run: openssl rand -hex 8 | md5sum > RANDOM
-      - uses: s0/git-publish-subdir-action@develop
-        name: Commit RANDOM
-        with:
-          REPO: self
-          BRANCH: master
-          FOLDER: master
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          SKIP_EMPTY_COMMITS: true
-
   run-coin:
     runs-on: ubuntu-latest
     steps:
