@@ -337,18 +337,10 @@ async def main(cookie: str):
 
 
 if __name__ == '__main__':
-    ck = sys.argv[1:]
-    cookie = ' '.join(ck) or os.environ.get('COOKIE', '')
-    if cookie == '':
-        print('未找到COOKIE')
+    st = sys.argv[1:]
+    stoken = ' '.join(st) or os.environ.get('STOKEN', '')
+    if stoken == '':
+        print('未找到STOKEN')
         sys.exit(-1)
-    if mys_id := re.search(r'(?:(?:login_uid|account_mid|account_id|stmid|ltmid|stuid|ltuid)(?:_v2)?)=(\d+)', cookie):
-        mys_id = mys_id[1]
-    login_ticket_match = re.search(r'(?:login_ticket|login_ticket_v2)=([0-9a-zA-Z]+)', cookie)
-    login_ticket = login_ticket_match[1] if login_ticket_match else None
-    stoken_match = re.search(r'(?:stoken|stoken_v2)=([0-9a-zA-Z]+)', cookie)
-    stoken = stoken_match[1] if stoken_match else None
-    if login_ticket and not stoken:
-        # 如果有login_ticket但没有stoken，就通过login_ticket获取stoken
-        stoken = asyncio.run(get_stoken_by_login_ticket(login_ticket, mys_id))
-    sys.exit(asyncio.run(main(f'stuid={mys_id};stoken={stoken};')))
+
+    sys.exit(asyncio.run(main(stoken)))

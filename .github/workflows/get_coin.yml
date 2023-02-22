@@ -7,9 +7,26 @@ on:
   workflow_dispatch:
 
 env:
-  COOKIE: ${{ secrets.COOKIE }}
+  STOKEN: ${{ secrets.STOKEN }}
 
 jobs:
+  push-random:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate RANDOM
+        run: openssl rand -hex 8 | md5sum > RANDOM
+      - name: commit
+        run: |
+          git config user.email 1121149616@qq.com
+          git config user.name DancingSnow
+          git add RANDOM
+          git commit -m "update RANDOM" -a
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
+
   run-coin:
     runs-on: ubuntu-latest
     steps:
