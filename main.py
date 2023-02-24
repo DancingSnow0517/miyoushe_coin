@@ -166,7 +166,7 @@ async def send_to_kook(content: str):
     headers = {'Authorization': f'Bot {token}'}
     async with httpx.AsyncClient() as client:
         rep = await client.post(
-            url='https://www.kookapp.cn/api/api/v3/direct-message/create',
+            url='https://www.kookapp.cn/api/v3/direct-message/create',
             headers=headers,
             data={'target_id': kook_id, 'content': content}
         )
