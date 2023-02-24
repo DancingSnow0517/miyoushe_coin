@@ -8,6 +8,8 @@ on:
 
 env:
   STOKEN: ${{ secrets.STOKEN }}
+  KOOK_TOKEN: ${{ secrets.KOOK_TOKEN }}
+  KOOK_ID: ${{ secrets.KOOK_ID }}
 
 jobs:
   run-coin:

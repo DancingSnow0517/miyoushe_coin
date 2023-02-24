@@ -4,7 +4,6 @@ import hashlib
 import json
 import os
 import random
-import re
 import string
 import sys
 import time
@@ -152,6 +151,28 @@ async def get_stoken_by_login_ticket(login_ticket: str, mys_id: str) -> Optional
         data = data.json()
         return data['data']['list'][0]['token']
     return None
+
+
+async def send_to_kook(content: str):
+    token = os.environ.get("KOOK_TOKEN", None)
+    kook_id = os.environ.get("KOOK_ID", None)
+    if token is None:
+        print('未找到推送机器人token')
+        return
+    if kook_id is None:
+        print('未找到推送 KOOK id')
+        return
+
+    headers = {'Authorization': f'Bot {token}'}
+    async with httpx.AsyncClient() as client:
+        rep = await client.post(
+            url='https://www.kookapp.cn/api/api/v3/direct-message/create',
+            headers=headers,
+            data={'target_id': kook_id, 'content': content}
+        )
+        data = rep.json()
+        if data['code'] != 0:
+            print(f'消息推送失败：{data["message"]}')
 
 
 async def main(cookie: str):
@@ -334,6 +355,8 @@ async def main(cookie: str):
         result += msg + '\n'
 
     print(result)
+
+    await send_to_kook(result)
 
 
 if __name__ == '__main__':
