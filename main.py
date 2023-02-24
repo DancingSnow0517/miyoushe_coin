@@ -1,5 +1,4 @@
 import asyncio
-import contextlib
 import hashlib
 import json
 import os
@@ -7,7 +6,6 @@ import random
 import string
 import sys
 import time
-from typing import Optional
 
 import httpx
 
@@ -20,8 +18,6 @@ bbs_list_url = 'https://bbs-api.mihoyo.com/post/api/getForumPostList?forum_id={}
 bbs_detail_url = 'https://bbs-api.mihoyo.com/post/api/getPostFull?post_id={}'
 bbs_share_url = 'https://bbs-api.mihoyo.com/apihub/api/getShareConf?entity_id={}&entity_type=1'
 bbs_like_url = 'https://bbs-api.mihoyo.com/apihub/sapi/upvotePost'
-
-STOKEN_API = 'https://api-takumi.mihoyo.com/auth/api/getMultiTokenByLoginTicket'
 
 mihoyo_bbs_List = [
     {
@@ -132,25 +128,6 @@ def get_old_version_ds(mhy_bbs: bool = False) -> str:
     r = ''.join(random.sample(string.ascii_lowercase + string.digits, 6))
     c = md5(f"salt={s}&t={t}&r={r}")
     return f"{t},{r},{c}"
-
-
-async def get_stoken_by_login_ticket(login_ticket: str, mys_id: str) -> Optional[str]:
-    with contextlib.suppress(Exception):
-        async with httpx.AsyncClient() as client:
-            data = await client.get(
-                STOKEN_API,
-                headers={
-                    'x-rpc-app_version': '2.11.2',
-                    'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) miHoYoBBS/2.11.1',
-                    'x-rpc-client_type': '5',
-                    'Referer': 'https://webstatic.mihoyo.com/',
-                    'Origin': 'https://webstatic.mihoyo.com',
-                },
-                params={'login_ticket': login_ticket, 'token_types': '3', 'uid': mys_id},
-            )
-        data = data.json()
-        return data['data']['list'][0]['token']
-    return None
 
 
 async def send_to_kook(content: str):
